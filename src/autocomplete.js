@@ -30,7 +30,13 @@ export function setupAutocomplete(container, newSources) {
     if (event.target.dataset?.ac) open(event.target);
   });
   container.addEventListener('focusout', (event) => {
-    if (current?.input === event.target) close();
+    const input = event.target;
+    if (current?.input !== input) return;
+    // Wait a moment: on iPhone the input can lose focus before the tap on a
+    // suggestion arrives, and closing right away would swallow that tap.
+    setTimeout(() => {
+      if (current?.input === input && document.activeElement !== input) close();
+    }, 250);
   });
   container.addEventListener('keydown', onKeyDown);
   // Scroll events don't bubble, but a capturing listener sees all of them.
@@ -132,18 +138,18 @@ function reposition() {
   dropdown.style.width = `${width}px`;
   dropdown.style.left = `${left}px`;
 
+  // Always positioned with `top` (relative to the layout viewport, like
+  // getBoundingClientRect), which also behaves with the iPhone keyboard open.
   const spaceBelow = viewportTop + viewportHeight - rect.bottom - 8;
   const spaceAbove = rect.top - viewportTop - 8;
   const wanted = Math.min(dropdown.scrollHeight, 224);
-  if (spaceBelow >= Math.min(wanted, 120) || spaceBelow >= spaceAbove) {
-    dropdown.style.top = `${rect.bottom + 4}px`;
-    dropdown.style.bottom = '';
-    dropdown.style.maxHeight = `${Math.max(80, Math.min(224, spaceBelow))}px`;
-  } else {
-    dropdown.style.top = '';
-    dropdown.style.bottom = `${window.innerHeight - rect.top + 4}px`;
-    dropdown.style.maxHeight = `${Math.max(80, Math.min(224, spaceAbove))}px`;
-  }
+  const below = spaceBelow >= Math.min(wanted, 120) || spaceBelow >= spaceAbove;
+  const maxHeight = Math.max(80, Math.min(224, below ? spaceBelow : spaceAbove));
+  dropdown.style.maxHeight = `${maxHeight}px`;
+  dropdown.style.bottom = '';
+  dropdown.style.top = below
+    ? `${rect.bottom + 4}px`
+    : `${rect.top - 4 - Math.min(wanted, maxHeight)}px`;
 }
 
 function pick(index) {

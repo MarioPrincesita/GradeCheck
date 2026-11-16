@@ -3,6 +3,7 @@
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import { isNative, replaceState, saveState, serialize, state } from './store.js';
+import { isIOS } from './util.js';
 
 export async function exportBackup() {
   const json = JSON.stringify({ ...serialize(), exportedAt: new Date().toISOString() }, null, 2);
@@ -27,6 +28,20 @@ export async function exportBackup() {
       if (!/cancel/i.test(String(error?.message ?? error))) throw error;
     }
     return;
+  }
+
+  // iPhone (web app): the share sheet has "Guardar en Archivos", Drive, AirDrop...
+  if (isIOS() && navigator.canShare) {
+    const file = new File([json], fileName, { type: 'application/json' });
+    if (navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file], title: 'Copia de seguridad de GradeCheck' });
+        return;
+      } catch (error) {
+        if (error?.name === 'AbortError') return; // closed the share sheet
+        // Otherwise fall back to the download below.
+      }
+    }
   }
 
   // Web: normal download.

@@ -14,6 +14,8 @@ const congratsButton = document.getElementById('congratulations-button');
 const congratsGift = document.getElementById('congratulations-gift');
 
 const IMPOSSIBLE = 'ಥ_ಥ';
+// 0 to 10 with "." or "," as decimal separator. Anything else gets the red border.
+const GRADE_PATTERN = '10([.,]0*)?|\\d?([.,]\\d*)?';
 const PASS_COLOR = '#5a9764';
 const FAIL_COLOR = '#b9574c';
 
@@ -92,11 +94,13 @@ function inputsHTML(subject, result) {
         .map((item) => {
           const grade = subject.grades[item.name];
           const done = isNumber(grade);
-          return `<div><span>${esc(item.name)}:</span><input type="number" inputmode="decimal" data-exam="${esc(
+          // type="text" + inputmode="decimal": iPhones with a Spanish keyboard type a
+          // comma, which Safari rejects in type="number" inputs.
+          return `<div><span>${esc(item.name)}:</span><input type="text" inputmode="decimal" pattern="${GRADE_PATTERN}" data-exam="${esc(
             item.name
           )}" placeholder="${esc(neededText(result, item.name))}" value="${
             done ? fmt(grade) : ''
-          }" class="scol${subject.color}${done ? '' : ' scolN2'}" autocomplete="off" step="0.01" min="0" max="10"></div>`;
+          }" class="scol${subject.color}${done ? '' : ' scolN2'}" autocomplete="off" enterkeyhint="done"></div>`;
         })
         .join('');
       return `<h3>${esc(group.type)}</h3><span>${round(group.weight * 100, 0)}%</span><div>${inputs}</div>`;
@@ -149,8 +153,8 @@ function displayMarks(card, subject, withConfetti = true) {
 
 function onGradeInput(card, subject, input) {
   const name = input.dataset.exam;
-  const value = input.value.replace(',', '.');
-  const number = value === '' ? undefined : Number(value);
+  const value = input.value.trim().replace(',', '.');
+  const number = value === '' || value === '.' ? undefined : Number(value);
   setGrade(subject, name, isNumber(number) ? number : undefined);
   displayMarks(card, subject);
 }

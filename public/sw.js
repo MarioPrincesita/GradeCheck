@@ -2,12 +2,16 @@
 // Pages: network first, so updates show up; everything else: cache first.
 // Either way the app keeps working offline.
 
-const CACHE = 'gradecheck-v1';
-const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png'];
+// The build id is filled in on every build (vite.config.js), so each deploy
+// installs a new service worker and drops the files of the previous one.
+const CACHE = 'gradecheck-__BUILD_ID__';
+// Every file of the build (filled in by vite.config.js), so the app works
+// offline from the very first launch, also when installed on an iPhone.
+const PRECACHE = ['./' /*__PRECACHE__*/];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE)));
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
 });
 
 self.addEventListener('activate', (event) => {

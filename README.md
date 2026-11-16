@@ -1,7 +1,8 @@
 # GradeCheck
 
 App para calcular la nota que necesitas en cada examen para aprobar una asignatura.
-Funciona como **app de Android (APK)** y también como web.
+Funciona como **app de Android (APK)** y como **web instalable en iPhone** (o en cualquier
+navegador): <https://marioprincesita.github.io/GradeCheck/>
 
 Basada en [GradeCalc](https://github.com/mauriciabad/GradeCalc) de Maurici Abad (licencia ISC):
 mismo diseño, tarjetas y animaciones, sin cuentas ni nube y con estas mejoras:
@@ -16,16 +17,30 @@ mismo diseño, tarjetas y animaciones, sin cuentas ni nube y con estas mejoras:
   sin nombre. Con **+ Evaluación alternativa** añades otra columna con nombre (p. ej. `Continua` y
   `Única`) y en la tarjeta eliges cuál usar.
 - **Guardado automático**: cada nota se guarda al momento en el móvil (almacenamiento nativo de
-  Android) y sigue ahí al cerrar la app y al instalar una versión nueva.
-- **Copia de seguridad**: ⚙️ → Exportar crea un `.json` que puedes guardar en Drive. Importar lo
-  restaura (reemplaza los datos actuales).
+  Android, o el del navegador en la web) y sigue ahí al cerrar la app y al actualizarla.
+- **Copia de seguridad**: ⚙️ → Exportar crea un `.json` que puedes guardar en Drive o en Archivos.
+  Importar lo restaura (reemplaza los datos actuales). Sirve también para pasar las notas de un
+  móvil a otro, incluso de Android a iPhone.
 
-## Instalar en el móvil (Android)
+## Instalar en iPhone
+
+1. Abre <https://marioprincesita.github.io/GradeCheck/> en **Safari**.
+2. Pulsa **Compartir** (el cuadrado con la flecha) → **Añadir a pantalla de inicio**.
+3. Ábrela desde el icono: va a pantalla completa, funciona sin internet y guarda tus notas.
+
+> ⚠️ Instálala **antes** de poner notas: en iPhone, lo que guardes en Safari no pasa a la app
+> instalada (si ya lo hiciste, usa Exportar en Safari e Importar en la app).
+>
+> Las actualizaciones llegan solas: cada vez que se sube algo a `main` se publica la web
+> (pestaña **Actions → Web (GitHub Pages)**) y la app la descarga la siguiente vez que la abres
+> con internet.
+
+## Instalar en Android
 
 1. Cada vez que se sube algo a la rama `main`, GitHub Actions compila el APK
    (pestaña **Actions → Android APK**, tarda unos 5 minutos).
-2. En el móvil, abre el repositorio en GitHub (con tu sesión iniciada, porque el repo es privado)
-   → **Releases → GradeCheck → `GradeCheck.apk`** y descárgalo.
+2. En el móvil, abre el repositorio en GitHub → **Releases → GradeCheck → `GradeCheck.apk`** y
+   descárgalo.
 3. Ábrelo y acepta *instalar apps de origen desconocido* para tu navegador la primera vez.
 4. Para actualizar, repite los pasos 2 y 3: se instala encima y **tus notas se mantienen**.
 
@@ -71,6 +86,8 @@ npm run android:open   # abre Android Studio -> Run ▶ (con el móvil conectado
 | `android/` | Proyecto Android generado por Capacitor |
 | `scripts/make-icons.mjs` | Genera los iconos (`npm run icons`) |
 | `.github/workflows/android.yml` | Compila y publica el APK |
+| `.github/workflows/pages.yml` | Publica la web en GitHub Pages |
+| `public/sw.js` | Service worker: la web funciona sin internet |
 
 ### Cambiar el icono
 

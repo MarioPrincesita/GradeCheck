@@ -63,6 +63,20 @@ button:focus-visible:not(:active) {
 ::selection {
   background-color: #f0ff7a;
 }
+/* GradeCheck: Safari (iPhone) still needs the prefixed property, and the
+   long-press menu on icons gets in the way. */
+button,
+img,
+#top-bar,
+#toast,
+.subject-card,
+.segmented,
+.color-bar,
+.ac-dropdown,
+.top-bar-popup {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
 
 #top-bar {
   position: fixed;
@@ -458,6 +472,15 @@ input::-webkit-inner-spin-button {
 }
 #tutorial h3 {
   margin: 0.5em 0 0;
+}
+/* GradeCheck: install instructions, only in Safari on iPhone/iPad */
+.install-ios {
+  display: none;
+}
+.ios-browser .install-ios {
+  display: list-item;
+  margin-top: 0.5em !important;
+  color: #1b7a4f;
 }
 #tutorial a {
   color: #c15100;

@@ -230,7 +230,8 @@ class EvalGrid {
 
   addWeightCell(row, weight) {
     const cell = html(
-      '<div class="edit-weight"><input type="number" name="weight" inputmode="decimal" placeholder="0" min="0" max="100" step="any" enterkeyhint="next"></div>'
+      // Text + decimal keyboard, so the comma of Spanish iPhone keyboards works.
+      '<div class="edit-weight"><input type="text" name="weight" inputmode="decimal" pattern="\\d*([.,]\\d*)?" placeholder="0" autocomplete="off" enterkeyhint="next"></div>'
     );
     if (weight) cell.firstElementChild.value = round(weight * 100, 4);
     row.weights.push(cell.firstElementChild);

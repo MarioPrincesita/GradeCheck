@@ -53,6 +53,21 @@ export function fmt(n) {
   return r === undefined ? '' : String(r);
 }
 
+/** iPhone / iPad (iPads report themselves as a Mac with a touch screen). */
+export function isIOS() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+/** True when running as an installed web app (home screen), not in a browser tab. */
+export function isStandalone() {
+  return (
+    window.matchMedia?.('(display-mode: standalone)').matches || navigator.standalone === true
+  );
+}
+
 /**
  * Academic year and term for a date. The academic year starts in August:
  * Aug–Jan is Q1, Feb–Jul is Q2.
