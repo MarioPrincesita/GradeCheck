@@ -1,0 +1,59 @@
+# Builds the Android APK on every push to main and publishes it in the
+# "apk" release of the repo (Releases -> GradeCheck.apk), ready to download
+# from the phone. Also runnable by hand: Actions -> Android APK -> Run workflow.
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install, test and build the web app
+        run: |
+          npm ci
+          npm test
+          npm run build
+          npx cap sync android
+
+      - name: Build the APK
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.0.${{ github.run_number }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk ../GradeCheck.apk
+
+      - name: Publish the APK in the "apk" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk --yes --cleanup-tag || true
+          gh release create apk GradeCheck.apk \
+            --title "GradeCheck 1.0.${{ github.run_number }}" \
+            --notes "APK generado automáticamente (commit ${GITHUB_SHA::7}). Descárgalo desde el móvil e instálalo encima de la versión anterior: tus notas se mantienen." \
+            --latest

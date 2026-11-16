@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <title>GradeCheck</title>
+    <meta
+      name="description"
+      content="GradeCheck calcula la nota que necesitas en cada examen para aprobar tus asignaturas."
+    />
+    <meta name="theme-color" content="#1b9f64" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="GradeCheck" />
+    <meta name="application-name" content="GradeCheck" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
+  </head>
+  <body>
+    <header id="top-bar">
+      <button type="button" id="settings-button" aria-label="Ajustes y copia de seguridad">
+        <img src="media/settings.svg" alt="" />
+      </button>
+      <h1>GradeCheck</h1>
+      <button
+        type="button"
+        id="add-button-topbar"
+        class="focus-animation-loop"
+        aria-label="Nueva asignatura"
+      >
+        <img src="media/plus.svg" alt="" />
+      </button>
+    </header>
+
+    <main class="screen">
+      <div id="dashboard" class="dashboard"></div>
+
+      <div id="tutorial" style="display: none">
+        <h2>🙋🏼‍♂️ Bienvenido 🙋🏼‍♀️</h2>
+        <p>GradeCheck te dice qué nota necesitas en cada examen para aprobar.</p>
+        <h3>Funciones:</h3>
+        <ul>
+          <li>- Calcula automáticamente la nota que necesitas para aprobar.</li>
+          <li>- Crea y edita tus asignaturas con su evaluación.</li>
+          <li>- Recuerda tus categorías, facultad y universidad para ir más rápido.</li>
+          <li>- Guarda tus notas en el móvil automáticamente.</li>
+          <li>- Exporta una copia de seguridad desde ⚙️.</li>
+        </ul>
+        <br />
+        <p>
+          <i>Añade tu primera asignatura pulsando el botón "+" de arriba a la derecha.</i>
+        </p>
+        <p>Una vez creada, tócala para poner tus notas.</p>
+        <br />
+        <p>
+          Basada en
+          <a href="https://github.com/mauriciabad/GradeCalc" target="_blank" rel="noopener"
+            >GradeCalc</a
+          >
+          de Maurici Abad.
+        </p>
+      </div>
+
+      <div id="congratulations-button" style="display: none">
+        <p><b>¡Lo has aprobado todo!</b></p>
+        <img
+          id="congratulations-gift"
+          src="media/gift_jump_once.gif"
+          alt="¡Felicidades!"
+          width="300"
+          height="300"
+        />
+        <p>🥳 Celébralo abriendo el regalo 😉</p>
+      </div>
+    </main>
+
+    <div id="editor-container" class="popup" style="display: none">
+      <div class="top-bar-popup" data-action="back">
+        <img src="media/back.svg" alt="Ir atrás" /><span id="editor-title">Nueva asignatura</span>
+      </div>
+      <div class="popup-content edit-popup">
+        <div id="editor-content"></div>
+        <button type="button" class="popup-main-button" id="editor-save">Crear</button>
+      </div>
+    </div>
+
+    <div id="settings-container" class="popup popup-small" style="display: none">
+      <div class="top-bar-popup" data-action="back"></div>
+      <div class="popup-content settings-popup">
+        <img
+          class="popup-round-img-top"
+          src="icons/icon-192.png"
+          alt=""
+          width="128"
+          height="128"
+        />
+        <div id="settings-content"></div>
+        <button type="button" class="popup-main-button" data-action="back">Hecho</button>
+      </div>
+    </div>
+
+    <div id="toast" style="display: none">
+      <div></div>
+    </div>
+
+    <input type="file" id="import-input" hidden />
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

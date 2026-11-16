@@ -1,0 +1,14 @@
+{
+  "appId": "io.github.marioprincesita.gradecheck",
+  "appName": "GradeCheck",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#dce0e0"
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover"
+    }
+  }
+}
